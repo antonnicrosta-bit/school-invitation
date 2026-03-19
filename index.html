@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Project Invitation</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+      padding: 20px;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .hero {
+      background: #2563eb;
+      color: white;
+      padding: 28px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid #dbe4f0;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    button {
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #eff6ff;
+    }
+    .letter {
+      white-space: pre-line;
+      border: 1px solid #dbe4f0;
+      border-radius: 16px;
+      background: #fcfdff;
+      padding: 20px;
+      line-height: 1.7;
+    }
+    .tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #cfe0ff;
+      color: #1e3a8a;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>School Project Invitation</h1>
+      <p>Please choose your language below to read the invitation letter.</p>
+    </div>
+
+    <div class="card">
+      <h2>Choose a Language</h2>
+
+      <div class="buttons">
+        <button onclick="setLanguage('english')">English</button>
+        <button onclick="setLanguage('french')">Francais</button>
+        <button onclick="setLanguage('spanish')">Espanol</button>
+        <button onclick="setLanguage('arabic')">العربية</button>
+        <button onclick="setLanguage('italian')">Italiano</button>
+        <button onclick="setLanguage('portuguese')">Portugues</button>
+      </div>
+
+      <div class="letter" id="letter"></div>
+      <div class="tag" id="selectedLanguage">Language: English</div>
+    </div>
+  </div>
+
+  <script>
+    const letters = {
+      english: {
+        label: "English",
+        text: "Dear Parents and Guardians.\n\nYou are warmly invited to attend our school project event. Students have worked hard to prepare presentations and would be very happy to share their work with you.\n\nEvent Details:\n- Date: [Insert Date]\n- Time: [Insert Time]\n- Location: [Insert Location]\n\nWe hope you will join us to celebrate the students' efforts and achievements. Thank you for your support.\n\nSincerely,\n[School Name / Class Name]"
+      },
+      french: {
+        label: "Francais",
+        text: "Chers parents et tuteurs,\n\nVous etes cordialement invites a assister a notre evenement de projet scolaire. Les eleves ont travaille fort pour preparer leurs presentations et seraient tres heureux de vous montrer leur travail.\n\nDetails de l'evenement :\n- Date : [Inserer la date]\n- Heure : [Inserer l'heure]\n- Lieu : [Inserer le lieu]\n\nNous esperons que vous pourrez vous joindre a nous pour celebrer les efforts et les reussites des eleves. Merci de votre soutien.\n\nCordialement,\n[Nom de l'ecole / Nom de la classe]"
+      },
+      spanish: {
+        label: "Espanol",
+        text: "Estimados padres y tutores:\n\nEstan cordialmente invitados a asistir a nuestro evento del proyecto escolar. Los estudiantes han trabajado mucho para preparar sus presentaciones y estaran muy felices de compartir su trabajo con ustedes.\n\nDetalles del evento:\n- Fecha: [Insertar fecha]\n- Hora: [Insertar hora]\n- Lugar: [Insertar lugar]\n\nEsperamos contar con su presencia para celebrar los esfuerzos y logros de los estudiantes. Gracias por su apoyo.\n\nAtentamente,\n[Nombre de la escuela / Nombre de la clase]"
+      },
+      arabic: {
+        label: "العربية",
+        text: "أولياء الأمور والأوصياء الكرام،\n\nندعوكم بكل سرور لحضور فعالية مشروعنا المدرسي. لقد عمل الطلاب بجد على إعداد عروضهم، وسيكونون سعداء جدا بمشاركة أعمالهم معكم.\n\nتفاصيل الفعالية:\n- التاريخ: [أدخل التاريخ]\n- الوقت: [أدخل الوقت]\n- المكان: [أدخل المكان]\n\nنأمل أن تنضموا إلينا للاحتفال بجهود الطلاب وإنجازاتهم. شكرا لدعمكم.\n\nمع خالص التقدير،\n[اسم المدرسة / اسم الصف]"
+      },
+      italian: {
+        label: "Italiano",
+        text: "Cari genitori e tutori,\n\nSiete cordialmente invitati a partecipare al nostro evento del progetto scolastico. Gli studenti hanno lavorato duramente per preparare le loro presentazioni e saranno molto felici di condividere il loro lavoro con voi.\n\nDettagli dell'evento:\n- Data: [Inserire la data]\n- Ora: [Inserire l'orario]\n- Luogo: [Inserire il luogo]\n\nSperiamo che possiate unirvi a noi per celebrare l'impegno e i risultati degli studenti. Grazie per il vostro supporto.\n\nCordiali saluti,\n[Nome della scuola / Nome della classe]"
+      },
+      portuguese: {
+        label: "Portugues",
+        text: "Prezados pais e responsaveis,\n\nVoces estao cordialmente convidados a participar do nosso evento de projeto escolar. Os alunos trabalharam bastante para preparar suas apresentacoes e ficarao muito felizes em compartilhar seu trabalho com voces.\n\nDetalhes do evento:\n- Data: [Inserir data]\n- Hora: [Inserir horario]\n- Local: [Inserir local]\n\nEsperamos que voces possam se juntar a nos para celebrar o esforco e as conquistas dos alunos. Obrigado pelo apoio.\n\nAtenciosamente,\n[Nome da escola / Nome da turma]"
+      }
+    };
+
+    function setLanguage(key) {
+      document.getElementById("letter").textContent = letters[key].text;
+      document.getElementById("selectedLanguage").textContent = "Language: " + letters[key].label;
+      document.body.dir = key === "arabic" ? "rtl" : "ltr";
+    }
+
+    setLanguage("english");
+  </script>
+</body>
+</html>
