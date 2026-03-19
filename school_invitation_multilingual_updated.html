@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journée invite tes parents à l’école</title>
+  <style>
+    :root {
+      --bg: #f6efe2;
+      --card: #fffaf0;
+      --accent: #f2a007;
+      --accent2: #f7c95c;
+      --pink: #f7a7a2;
+      --text: #222;
+      --muted: #6b5f50;
+      --border: #ead9b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 18px;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero {
+      background: linear-gradient(135deg, #fff7ea, #fff1cf);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 26px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.05;
+    }
+    .subtitle {
+      margin: 0;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-weight: 700;
+      text-align: center;
+    }
+    .controls, .grid, .two-col {
+      display: grid;
+      gap: 16px;
+    }
+    .controls {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      margin: 18px 0;
+    }
+    button {
+      border: 1px solid var(--border);
+      background: white;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #fff8ea;
+    }
+    .note {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .grid {
+      grid-template-columns: 1.25fr 0.95fr;
+      align-items: start;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+    }
+    .pink {
+      background: #ffe2df;
+    }
+    .yellow {
+      background: #fff2c9;
+    }
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 1.7rem;
+    }
+    .schedule-item {
+      margin-bottom: 18px;
+      line-height: 1.55;
+    }
+    .time {
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-decoration: underline;
+    }
+    ul {
+      margin: 8px 0 0 24px;
+    }
+    .two-col {
+      grid-template-columns: 1fr 1fr;
+      margin-top: 16px;
+    }
+    .badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
+    .details p, .details li, .card p {
+      line-height: 1.6;
+    }
+    .big {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .center {
+      text-align: center;
+    }
+    @media (max-width: 860px) {
+      .grid, .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1 id="title">Journée invite tes parents à l’école</h1>
+      <p class="subtitle" id="subtitle">Venez découvrir la journée scolaire de votre enfant !!</p>
+
+      <div class="controls">
+        <button onclick="setLanguage('fr')">Français</button>
+        <button onclick="setLanguage('en')">English</button>
+        <button onclick="setLanguage('es')">Español</button>
+        <button onclick="setLanguage('ar')">العربية</button>
+        <button onclick="setLanguage('it')">Italiano</button>
+        <button onclick="setLanguage('pt')">Português</button>
+      </div>
+
+      <div class="note" id="introNote"></div>
+      <div class="badge" id="selectedLanguage">Langue : Français</div>
+    </div>
+
+    <div class="grid">
+      <div class="card yellow">
+        <h2 class="section-title" id="scheduleTitle">Horaire de la journée</h2>
+        <div id="schedule"></div>
+      </div>
+
+      <div>
+        <div class="card pink" style="margin-bottom:16px;">
+          <h2 class="section-title" id="messageTitle">Message aux parents</h2>
+          <p id="messageText"></p>
+        </div>
+
+        <div class="card details" style="margin-bottom:16px;">
+          <h2 class="section-title" id="detailsTitle">Détails</h2>
+          <p><span class="big" id="dateLabel">Date :</span> <span id="dateText"></span></p>
+          <p><span class="big" id="locationLabel">Lieu :</span> <span id="locationText"></span></p>
+        </div>
+
+        <div class="card center" style="background:#ffd56d;">
+          <h2 class="section-title" id="bbqTitle">BBQ</h2>
+          <p class="big" id="bbqSubtitle">parents - élèves - enseignants</p>
+          <p class="big" id="bbqTime">14h00-16h00</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card yellow">
+        <h2 class="section-title" id="supportTitle">Comment participer et soutenir votre enfant :</h2>
+        <ul id="supportList"></ul>
+      </div>
+
+      <div>
+        <div class="card pink" style="margin-bottom:16px;">
+          <h2 class="section-title center" id="raffleTitle">Tirage au sort pour parents et enfants</h2>
+          <p class="center big" id="raffleText">Chance de gagner un panier surprise !!!</p>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <h2 class="section-title" id="mealTitle">Repas</h2>
+          <ul id="mealList"></ul>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title" id="activitiesTitle">Activités</h2>
+          <ul id="activitiesList"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const content = {
+      fr: {
+        langLabel: "Langue : Français",
+        title: "Journée invite tes parents à l’école",
+        subtitle: "Venez découvrir la journée scolaire de votre enfant !!",
+        introNote: "Besoin d’aide pour comprendre ? Choisissez votre langue pour voir la traduction de l’invitation.",
+        scheduleTitle: "Horaire de la journée",
+        schedule: [
+          {time: "14h00 Accueil des parents", items: ["Présentation de la journée dans le gym 1"]},
+          {time: "14h10 - 14h40 Ateliers de français", items: ["Nommer l’animal (1ère - 3ième)", "Mots croisées (4ième - 6ième)"]},
+          {time: "14h50 - 15h20 Ateliers de mathématiques", items: ["Exercice calculs simple", "Jeux intéractifs avec fausse monnaie"]},
+          {time: "15h30 - 16h00 Activité créative", items: ["« Nos cultures, nos familles »"]}
+        ],
+        messageTitle: "Message aux parents",
+        messageText: "Votre enfant vous préparera une carte d’invitation personnalisée. Vous recevrez aussi un courriel et une affiche avec tous les détails de la journée.",
+        detailsTitle: "Détails",
+        dateLabel: "Date :",
+        dateText: "Vendredi le 18 septembre 2026",
+        locationLabel: "Lieu :",
+        locationText: "2159 Nantes St, Orléans, ON K4A 4C4",
+        bbqTitle: "BBQ",
+        bbqSubtitle: "parents - élèves - enseignants",
+        bbqTime: "14h00-16h00",
+        supportTitle: "Comment participer et soutenir votre enfant :",
+        supportList: [
+          "Participer aux activités (lecture, maths, dessin)",
+          "Encourager et féliciter votre enfant",
+          "Poser des questions simples",
+          "Le laisser essayer par lui-même",
+          "Montrer de l’intérêt pour son apprentissage",
+          "Partager un moment en famille (« Nos cultures, nos familles »)",
+          "Échanger avec l’enseignant(e) et les parents",
+          "Profiter du barbecue pour créer des liens"
+        ],
+        raffleTitle: "Tirage au sort pour parents et enfants",
+        raffleText: "Chance de gagner un panier surprise !!!",
+        mealTitle: "Repas",
+        mealList: ["Hamburgers", "Hot-dogs", "Croustilles", "Boissons gazeuses", "Jus pour les élèves"],
+        activitiesTitle: "Activités",
+        activitiesList: ["Jeux d’annaux", "Jeux de poches", "Chaises musicales", "Maquillage pour enfants"]
+      },
+      en: {
+        langLabel: "Language: English",
+        title: "Invite Your Parents to School Day",
+        subtitle: "Come discover your child’s school day!!",
+        introNote: "Need help understanding? Choose your language to view the invitation translation.",
+        scheduleTitle: "Day Schedule",
+        schedule: [
+          {time: "2:00 PM Parent Welcome", items: ["Presentation of the day in Gym 1"]},
+          {time: "2:10 PM - 2:40 PM French Workshops", items: ["Name the animal (Grades 1 to 3)", "Crossword activities (Grades 4 to 6)"]},
+          {time: "2:50 PM - 3:20 PM Math Workshops", items: ["Simple calculation exercises", "Interactive games with play money"]},
+          {time: "3:30 PM - 4:00 PM Creative Activity", items: ["“Our cultures, our families”"]}
+        ],
+        messageTitle: "Message for Parents",
+        messageText: "Your child will prepare a personalized invitation card for you. You will also receive an email and a poster with all the details of the day.",
+        detailsTitle: "Details",
+        dateLabel: "Date:",
+        dateText: "Friday, September 18, 2026",
+        locationLabel: "Location:",
+        locationText: "2159 Nantes St, Orléans, ON K4A 4C4",
+        bbqTitle: "BBQ",
+        bbqSubtitle: "parents - students - teachers",
+        bbqTime: "2:00 PM-4:00 PM",
+        supportTitle: "How to participate and support your child:",
+        supportList: [
+          "Take part in the activities (reading, math, drawing)",
+          "Encourage and congratulate your child",
+          "Ask simple questions",
+          "Let them try by themselves",
+          "Show interest in their learning",
+          "Share a family moment (“Our cultures, our families”)",
+          "Talk with the teacher and other parents",
+          "Enjoy the barbecue and build connections"
+        ],
+        raffleTitle: "Raffle for Parents and Children",
+        raffleText: "Chance to win a surprise basket!!!",
+        mealTitle: "Food",
+        mealList: ["Hamburgers", "Hot dogs", "Chips", "Soft drinks", "Juice for students"],
+        activitiesTitle: "Activities",
+        activitiesList: ["Ring toss", "Bean bag toss", "Musical chairs", "Face painting for children"]
+      },
+      es: {
+        langLabel: "Idioma: Español",
+        title: "Día invita a tus padres a la escuela",
+        subtitle: "¡Vengan a descubrir la jornada escolar de su hijo o hija!",
+        introNote: "¿Necesita ayuda para entender? Elija su idioma para ver la traducción de la invitación.",
+        scheduleTitle: "Horario del día",
+        schedule: [
+          {time: "14:00 Bienvenida a las familias", items: ["Presentación del día en el gimnasio 1"]},
+          {time: "14:10 - 14:40 Talleres de francés", items: ["Nombrar al animal (1.º a 3.º)", "Crucigramas (4.º a 6.º)"]},
+          {time: "14:50 - 15:20 Talleres de matemáticas", items: ["Ejercicios de cálculo simple", "Juegos interactivos con dinero ficticio"]},
+          {time: "15:30 - 16:00 Actividad creativa", items: ["“Nuestras culturas, nuestras familias”"]}
+        ],
+        messageTitle: "Mensaje para las familias",
+        messageText: "Su hijo o hija preparará una tarjeta de invitación personalizada para usted. También recibirá un correo electrónico y un afiche con todos los detalles del día.",
+        detailsTitle: "Detalles",
+        dateLabel: "Fecha:",
+        dateText: "Viernes 18 de septiembre de 2026",
+        locationLabel: "Lugar:",
+        locationText: "2159 Nantes St, Orléans, ON K4A 4C4",
+        bbqTitle: "BBQ",
+        bbqSubtitle: "padres - estudiantes - docentes",
+        bbqTime: "14:00-16:00",
+        supportTitle: "Cómo participar y apoyar a su hijo o hija:",
+        supportList: [
+          "Participar en las actividades (lectura, matemáticas, dibujo)",
+          "Animar y felicitar a su hijo o hija",
+          "Hacer preguntas sencillas",
+          "Dejar que lo intente por sí mismo",
+          "Mostrar interés por su aprendizaje",
+          "Compartir un momento en familia (“Nuestras culturas, nuestras familias”)",
+          "Hablar con el docente y con otras familias",
+          "Disfrutar de la barbacoa para crear vínculos"
+        ],
+        raffleTitle: "Sorteo para padres e hijos",
+        raffleText: "¡Oportunidad de ganar una canasta sorpresa!",
+        mealTitle: "Comida",
+        mealList: ["Hamburguesas", "Perros calientes", "Papas fritas", "Bebidas gaseosas", "Jugo para los estudiantes"],
+        activitiesTitle: "Actividades",
+        activitiesList: ["Juego de anillos", "Juego de bolsas", "Sillas musicales", "Pintura facial para niños"]
+      },
+      ar: {
+        langLabel: "اللغة: العربية",
+        title: "يوم ادعُ والديك إلى المدرسة",
+        subtitle: "تعالوا لاكتشاف اليوم الدراسي لطفلكم!",
+        introNote: "هل تحتاجون إلى المساعدة في الفهم؟ اختاروا لغتكم لعرض ترجمة الدعوة.",
+        scheduleTitle: "برنامج اليوم",
+        schedule: [
+          {time: "2:00 مساءً استقبال أولياء الأمور", items: ["عرض تقديمي عن اليوم في الصالة الرياضية 1"]},
+          {time: "2:10 - 2:40 مساءً ورش اللغة الفرنسية", items: ["تسمية الحيوان (من الصف الأول إلى الثالث)", "كلمات متقاطعة (من الصف الرابع إلى السادس)"]},
+          {time: "2:50 - 3:20 مساءً ورش الرياضيات", items: ["تمارين حسابية بسيطة", "ألعاب تفاعلية بنقود تعليمية"]},
+          {time: "3:30 - 4:00 مساءً نشاط إبداعي", items: ["« ثقافاتنا، عائلاتنا »"]}
+        ],
+        messageTitle: "رسالة إلى أولياء الأمور",
+        messageText: "سيُحضّر طفلكم بطاقة دعوة شخصية لكم. وستتلقون أيضًا بريدًا إلكترونيًا وملصقًا يحتويان على جميع تفاصيل اليوم.",
+        detailsTitle: "التفاصيل",
+        dateLabel: "التاريخ:",
+        dateText: "الجمعة 18 سبتمبر 2026",
+        locationLabel: "المكان:",
+        locationText: "2159 Nantes St, Orléans, ON K4A 4C4",
+        bbqTitle: "شواء",
+        bbqSubtitle: "أولياء الأمور - الطلاب - المعلمون",
+        bbqTime: "2:00-4:00 مساءً",
+        supportTitle: "كيف يمكنكم المشاركة ودعم طفلكم:",
+        supportList: [
+          "المشاركة في الأنشطة (القراءة، الرياضيات، الرسم)",
+          "تشجيع طفلكم وتهنئته",
+          "طرح أسئلة بسيطة",
+          "تركه يحاول بنفسه",
+          "إظهار الاهتمام بتعلّمه",
+          "مشاركة لحظة عائلية (« ثقافاتنا، عائلاتنا »)",
+          "التحدث مع المعلم وأولياء الأمور الآخرين",
+          "الاستمتاع بالشواء وبناء العلاقات"
+        ],
+        raffleTitle: "سحب جوائز للأهالي والأطفال",
+        raffleText: "فرصة للفوز بسلة مفاجآت!",
+        mealTitle: "الطعام",
+        mealList: ["هامبرغر", "هوت دوغ", "رقائق البطاطس", "مشروبات غازية", "عصير للطلاب"],
+        activitiesTitle: "الأنشطة",
+        activitiesList: ["لعبة الحلقات", "لعبة أكياس الرمي", "الكراسي الموسيقية", "رسم الوجوه للأطفال"]
+      },
+      it: {
+        langLabel: "Lingua: Italiano",
+        title: "Giornata invita i tuoi genitori a scuola",
+        subtitle: "Venite a scoprire la giornata scolastica di vostro figlio o vostra figlia!",
+        introNote: "Hai bisogno di aiuto per capire? Scegli la tua lingua per vedere la traduzione dell’invito.",
+        scheduleTitle: "Programma della giornata",
+        schedule: [
+          {time: "14:00 Accoglienza dei genitori", items: ["Presentazione della giornata nella palestra 1"]},
+          {time: "14:10 - 14:40 Laboratori di francese", items: ["Dare un nome all’animale (1ª - 3ª)", "Cruciverba (4ª - 6ª)"]},
+          {time: "14:50 - 15:20 Laboratori di matematica", items: ["Esercizi di calcolo semplice", "Giochi interattivi con denaro finto"]},
+          {time: "15:30 - 16:00 Attività creativa", items: ["“Le nostre culture, le nostre famiglie”"]}
+        ],
+        messageTitle: "Messaggio ai genitori",
+        messageText: "Vostro figlio o vostra figlia preparerà per voi un invito personalizzato. Riceverete anche un’email e un poster con tutti i dettagli della giornata.",
+        detailsTitle: "Dettagli",
+        dateLabel: "Data:",
+        dateText: "Venerdì 18 settembre 2026",
+        locationLabel: "Luogo:",
+        locationText: "2159 Nantes St, Orléans, ON K4A 4C4",
+        bbqTitle: "BBQ",
+        bbqSubtitle: "genitori - studenti - insegnanti",
+        bbqTime: "14:00-16:00",
+        supportTitle: "Come partecipare e sostenere vostro figlio o vostra figlia:",
+        supportList: [
+          "Partecipare alle attività (lettura, matematica, disegno)",
+          "Incoraggiare e congratularsi con vostro figlio o vostra figlia",
+          "Fare domande semplici",
+          "Lasciarlo/a provare da solo/a",
+          "Mostrare interesse per il suo apprendimento",
+          "Condividere un momento in famiglia (“Le nostre culture, le nostre famiglie”)",
+          "Parlare con l’insegnante e con gli altri genitori",
+          "Godersi il barbecue e creare legami"
+        ],
+        raffleTitle: "Estrazione per genitori e bambini",
+        raffleText: "Possibilità di vincere un cestino sorpresa!",
+        mealTitle: "Cibo",
+        mealList: ["Hamburger", "Hot dog", "Patatine", "Bibite gassate", "Succo per gli studenti"],
+        activitiesTitle: "Attività",
+        activitiesList: ["Lancio degli anelli", "Lancio dei sacchetti", "Sedie musicali", "Trucco per bambini"]
+      },
+      pt: {
+        langLabel: "Idioma: Português",
+        title: "Dia convide seus pais para a escola",
+        subtitle: "Venham descobrir o dia escolar do seu filho ou da sua filha!",
+        introNote: "Precisa de ajuda para entender? Escolha seu idioma para ver a tradução do convite.",
+        scheduleTitle: "Programação do dia",
+        schedule: [
+          {time: "14h00 Recepção dos pais", items: ["Apresentação do dia no ginásio 1"]},
+          {time: "14h10 - 14h40 Oficinas de francês", items: ["Nomear o animal (1º ao 3º ano)", "Palavras cruzadas (4º ao 6º ano)"]},
+          {time: "14h50 - 15h20 Oficinas de matemática", items: ["Exercícios simples de cálculo", "Jogos interativos com dinheiro de brincadeira"]},
+          {time: "15h30 - 16h00 Atividade criativa", items: ["“Nossas culturas, nossas famílias”"]}
+        ],
+        messageTitle: "Mensagem para os pais",
+        messageText: "Seu filho ou sua filha preparará um cartão de convite personalizado para você. Você também receberá um e-mail e um cartaz com todos os detalhes do dia.",
+        detailsTitle: "Detalhes",
+        dateLabel: "Data:",
+        dateText: "Sexta-feira, 18 de setembro de 2026",
+        locationLabel: "Local:",
+        locationText: "2159 Nantes St, Orléans, ON K4A 4C4",
+        bbqTitle: "Churrasco",
+        bbqSubtitle: "pais - alunos - professores",
+        bbqTime: "14h00-16h00",
+        supportTitle: "Como participar e apoiar seu filho ou sua filha:",
+        supportList: [
+          "Participar das atividades (leitura, matemática, desenho)",
+          "Incentivar e parabenizar seu filho ou sua filha",
+          "Fazer perguntas simples",
+          "Deixar que tente sozinho/a",
+          "Mostrar interesse pela aprendizagem",
+          "Compartilhar um momento em família (“Nossas culturas, nossas famílias”)",
+          "Conversar com o(a) professor(a) e com outros pais",
+          "Aproveitar o churrasco para criar laços"
+        ],
+        raffleTitle: "Sorteio para pais e crianças",
+        raffleText: "Chance de ganhar uma cesta surpresa!",
+        mealTitle: "Comida",
+        mealList: ["Hambúrgueres", "Cachorros-quentes", "Salgadinhos", "Refrigerantes", "Suco para os alunos"],
+        activitiesTitle: "Atividades",
+        activitiesList: ["Jogo de argolas", "Jogo de saquinhos", "Cadeiras musicais", "Pintura facial para crianças"]
+      }
+    };
+
+    function renderList(el, items) {
+      el.innerHTML = items.map(item => `<li>${item}</li>`).join("");
+    }
+
+    function renderSchedule(items) {
+      return items.map(section => `
+        <div class="schedule-item">
+          <div class="time">${section.time}</div>
+          <ul>${section.items.map(item => `<li>${item}</li>`).join("")}</ul>
+        </div>
+      `).join("");
+    }
+
+    function setLanguage(key) {
+      const d = content[key];
+      document.documentElement.lang = key;
+      document.body.dir = key === "ar" ? "rtl" : "ltr";
+
+      document.getElementById("selectedLanguage").textContent = d.langLabel;
+      document.getElementById("title").textContent = d.title;
+      document.getElementById("subtitle").textContent = d.subtitle;
+      document.getElementById("introNote").textContent = d.introNote;
+      document.getElementById("scheduleTitle").textContent = d.scheduleTitle;
+      document.getElementById("schedule").innerHTML = renderSchedule(d.schedule);
+      document.getElementById("messageTitle").textContent = d.messageTitle;
+      document.getElementById("messageText").textContent = d.messageText;
+      document.getElementById("detailsTitle").textContent = d.detailsTitle;
+      document.getElementById("dateLabel").textContent = d.dateLabel;
+      document.getElementById("dateText").textContent = d.dateText;
+      document.getElementById("locationLabel").textContent = d.locationLabel;
+      document.getElementById("locationText").textContent = d.locationText;
+      document.getElementById("bbqTitle").textContent = d.bbqTitle;
+      document.getElementById("bbqSubtitle").textContent = d.bbqSubtitle;
+      document.getElementById("bbqTime").textContent = d.bbqTime;
+      document.getElementById("supportTitle").textContent = d.supportTitle;
+      document.getElementById("raffleTitle").textContent = d.raffleTitle;
+      document.getElementById("raffleText").textContent = d.raffleText;
+      document.getElementById("mealTitle").textContent = d.mealTitle;
+      document.getElementById("activitiesTitle").textContent = d.activitiesTitle;
+
+      renderList(document.getElementById("supportList"), d.supportList);
+      renderList(document.getElementById("mealList"), d.mealList);
+      renderList(document.getElementById("activitiesList"), d.activitiesList);
+    }
+
+    setLanguage("fr");
+  </script>
+</body>
+</html>
